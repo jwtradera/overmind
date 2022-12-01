@@ -109,6 +109,7 @@ module overmind::bank {
 
         // Check if deposited
         assert!(table::contains(&mut bank.depositors, withdrawer_addr), error::permission_denied(ECANNOT_WITHDRAW_BEFORE_DEPOSIT));
+        /*
         let deposit = &mut table::borrow_mut(&mut bank.deposits, withdrawer_addr);
 
         // Check if already withdrawn
@@ -123,6 +124,7 @@ module overmind::bank {
 
         // Update status
         deposit.is_claimed = true;
+        */
 
         bank.withdrawers_count = bank.withdrawers_count + 1;
     }
