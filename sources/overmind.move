@@ -92,7 +92,7 @@ module overmind::bank {
         assert!(!table::contains(&bank.depositors, depositor_addr), error::already_exists(EDEPOSITOR_ALREADY_EXISTS));
 
         // Deposit coins
-        let coins = coin::withdraw<CoinType>(depositor, bank.withdrawers_count);
+        let coins = coin::withdraw<CoinType>(depositor, bank.deposit_amount);
         table::add(&mut bank.depositors, depositor_addr, Deposit<CoinType> { coins, is_claimed: false });
 
         // Update deposit status
@@ -109,8 +109,8 @@ module overmind::bank {
 
         // Check if deposited
         assert!(table::contains(&mut bank.depositors, withdrawer_addr), error::permission_denied(ECANNOT_WITHDRAW_BEFORE_DEPOSIT));
-        /*
-        let deposit = &mut table::borrow_mut(&mut bank.deposits, withdrawer_addr);
+
+        let deposit = table::borrow_mut(&mut bank.depositors, withdrawer_addr);
 
         // Check if already withdrawn
         assert!(!deposit.is_claimed, error::permission_denied(ECANNOT_WITHDRAW_AGAIN));
@@ -124,7 +124,6 @@ module overmind::bank {
 
         // Update status
         deposit.is_claimed = true;
-        */
 
         bank.withdrawers_count = bank.withdrawers_count + 1;
     }
